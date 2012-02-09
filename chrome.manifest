@@ -1,0 +1,4 @@
+content server_revealer							chrome/content/
+locale	server_revealer	en-US					chrome/locale/en-UK/
+skin	server_revealer	classic/1.0				chrome/skin/
+overlay chrome://browser/content/browser.xul	chrome://server_revealer/content/serverRevealerOverlay.xul
