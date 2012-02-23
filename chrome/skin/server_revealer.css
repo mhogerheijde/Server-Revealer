@@ -1,1 +1,16 @@
-/* TODO */
+notification[value='server-revealer-notification-production'] {
+    background-color: red;
+}
+
+notification[value='server-revealer-notification-acceptance'] {
+    background-color: orange;
+}
+notification[value='server-revealer-notification-testing'] {
+	background-color: yellow;
+}
+
+
+notification[value='server-revealer-notification-development'] {
+	background-color: green;
+}
+

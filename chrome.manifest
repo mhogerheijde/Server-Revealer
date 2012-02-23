@@ -1,2 +1,3 @@
 content server_revealer							chrome/content/
 overlay chrome://browser/content/browser.xul	chrome://server_revealer/content/serverRevealerOverlay.xul
+style chrome://global/content/customizeToolbar.xul chrome://server_revealer/skin/server_revealer.css
