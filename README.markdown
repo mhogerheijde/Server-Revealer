@@ -19,7 +19,7 @@ If you don't know how, I advice you to look at (and read) [this section](https:/
 
 ## Server Setup
 
-This plugin works by looking at a custom header added to the response of your server. For now it listens only to the header `X-SERVER-TYPE` and understands only these for values:
+This plugin works by looking at a custom header added to the response of your server. For now it listens only to the header `X-SERVER-TYPE` and understands only these four values:
 
 1. development
 2. testing
