@@ -8,6 +8,7 @@
 		<em:version>1.0</em:version>
 		<em:description>Reveals the server you are currently browsing. Makes use of X- headers set by your server.</em:description>
 		<em:creator>matthias@hogerheijde.net</em:creator>
+		<em:optionsURL>chrome://server_revealer/content/options.xul</em:optionsURL>
 
 
 		<em:targetApplication>

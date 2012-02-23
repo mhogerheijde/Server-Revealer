@@ -3,8 +3,4 @@
 
 	<script type="application/x-javascript;version=1.8" src="serverRevealerOverlay.js"/>
 
-	<statusbar id="status-bar">
-		<statusbarpanel id="my-panel" label="Hello, World"  />
-	</statusbar>
-
 </overlay>
