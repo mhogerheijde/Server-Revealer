@@ -12,7 +12,7 @@ The plugin itself has no configuration (yet) and is not (yet) submitted to Mozil
 If you don't know how, I advice you to look at (and read) [this section](https://developer.mozilla.org/en/Building_an_Extension#Test) from the Mozilla Developer Network. Otherwise in short:
 
 * git clone git://github.com/mhogerheijde/Server-Revealer.git `path-to-workspace`
-* Locate your [profile folder](http://kb.mozillazine.org/Profile_folder) (e.g. Firefox/Profiles/<profile_id>.default) or make a [new one](http://kb.mozillazine.org/Profile_manager)
+* Locate your [profile folder](http://kb.mozillazine.org/Profile_folder) (e.g. Firefox/Profiles/`<profile_id>`.default) or make a [new one](http://kb.mozillazine.org/Profile_manager)
 * Open the extensions/ folder, creating it if need be.
 * Create a new text file with the id of this extension as its name (i.e. `server_revealer@hogerheijde.net`). No file extension
 * In it, put the full path to `paht-to-workspace`  (e.g. C:\workspace\server\_revealer\ or ~/workspace/server\_revealer/)
