@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<prefwindow title="Server Revealer Preferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<prefpane label="Server Revealer Preferences">
+		<preferences>
+			<preference id="server-revealer-headertag" name="extensions.serverrevealer.headertag" type="string" />
+		</preferences>
+
+		<vbox style="width: 40em">
+			<tabbox id="mainTabs">
+				<tabs>
+					<tab label="General Preferences" id="nsopt-tabGeneral" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<vbox flex="1">
+							<description style="white-space: normal; width: 33em" id="descriptionText">
+								The header to
+							</description>
+							<separator class="thin" />
+							<label control="headerText" value="Header" />
+							<textbox id="headerText" flex="1" />
+						</vbox>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</vbox>
+	</prefpane>
+</prefwindow>
