@@ -4,14 +4,13 @@ var serverRevealerOverlay = (function() {
 	var $ = function (id) {
 		return document.getElementById(id)
 	};
-//	const Cc = Components.classes;
-//	const Ci = Components.interfaces;
 
 	return {
 
 		initialise: function() {
-			console.log("TESTING!!");
-			 window.addEventListener("load", this.listeners.onLoad, false);
+			// Attach a onLoad eventlistener to the window, in order to do work only
+			// after the window is loaded
+			window.addEventListener("load", this.listeners.onLoad, false);
 		},
 
 		listeners : {
@@ -19,9 +18,6 @@ var serverRevealerOverlay = (function() {
 			 * When the window is loaded, setup other listeners.
 			 */
 			onLoad : function(e) {
-				Components.utils.reportError("onLoad()!");
-				console.log("TESTING!!");
-				Components.utils.reportError(e);
 				// Setup the listeners
 				serverRevealerOverlay.listeners.setup();
 			},
@@ -30,52 +26,47 @@ var serverRevealerOverlay = (function() {
 			 * Setup listeners
 			 */
 			setup: function () {
-				Components.utils.reportError("setup()");
-
 				// Remove the onload listener, we don't need it anymore
 				window.removeEventListener("load", this.onLoad, false);
+
 				// Cleanup when window is unloaded
 				window.addEventListener("unload",this.onUnload, false);
 
 				// Setup page show/hide/content listeners, in order to get in action when
 				// a new page is opened and content is loaded
 				window.addEventListener("pageshow", this.onPageShow, true);
-//				window.addEventListener("pagehide", this.onPageHide, true);
-//				window.addEventListener("DOMContentLoaded", this.onContentLoad, false);
 
 
 			},
 
 			onUnload: function (ev) {
-				//TODO remove listeners etc.
+				//TODO: remove listeners etc.
 			},
 
 			onContentLoad: function (ev) {
-
-
+				//TODO: Check if this listener is needed
 			},
 
 			onDocumentLoad: function (ev) {
-				serverRevealerOverlay.dump("onDocumentLoad()");
-				if (ev.originalTarget instanceof HTMLDocument) {
-					let w = ev.currentTarget;
-					w.removeEventListener("load", serverRevealerOverlay.listeners.onDocumentLoad, false);
-					serverRevealerOverlay.dump(w);
-//					window.setTimeout(function () {
-//						noscriptOverlay.ns.detectJSRedirects(w.document);
-//					}, 50);
-				}
+				//TODO: Check if this listener is needed
 			},
 
+			/**
+			 * The onPageShow listener checks if the page is served from one of the servers
+			 * in our DTAP cycle. If so, displays a bar indicating which one.
+			 */
 			onPageShow: function (ev) {
-//				serverRevealerOverlay.dump("onPageShow()");
+				const HEADER_NAME = 'X-SERVER-TYPE';
 
+				// We're going to do a HEAD request on the currently loaded URL
+				//TODO: Find out how to ask Firefox for the header-data
 				var url = window.content.location.href;
 
 				var http = new XMLHttpRequest();
 				http.open('HEAD', url, false);
 				http.send();
 
+				//Fetch the headers and reformat into Object for easy use
 				rawHeaders = (http.getAllResponseHeaders()).trim().split("\n");
 				headers = {};
 				for(line in rawHeaders) {
@@ -83,59 +74,53 @@ var serverRevealerOverlay = (function() {
 					key = data.shift();
 					headers[key] = data.join(":");
 				}
-//				serverRevealerOverlay.dump(headers);
 
-//				dump(headers['X-SA-SERVERTYPE']);
 
-				if(headers['X-SA-SERVERTYPE']) {
+				// If the header is not there, gracefully walk away.
+				if(headers[HEADER_NAME]) {
 
 					var nb = gBrowser.getNotificationBox();
 
 					prio = nb.PRIORITY_INFO_LOW
-
-					switch(headers['X-SA-SERVERTYPE']) {
+					// icons from http://findicons.com
+					switch(headers[HEADER_NAME]) {
 						case 'development':
 							prio = nb.PRIORITY_INFO_LOW;
+							break;
+						case 'testing':
+							prio = nb.PRIORITY_INFO_HIGH;
+							break;
+						case 'acceptance':
+							prio = nb.PRIORITY_WARNING_LOW;
 							break;
 						case 'production':
 							prio = nb.PRIORITY_CRITICAL_HIGH;
 							break;
 					}
 
-//					nb.PRIORITY_INFO_LOW
-//				    nb.PRIORITY_INFO_MEDIUM
-//				    nb.PRIORITY_INFO_HIGH
-//				    nb.PRIORITY_WARNING_LOW
-//				    nb.PRIORITY_WARNING_MEDIUM
-//				    nb.PRIORITY_WARNING_HIGH
-//				    nb.PRIORITY_CRITICAL_LOW
-//				    nb.PRIORITY_CRITICAL_MEDIUM
-//				    nb.PRIORITY_CRITICAL_HIGH
-//				    nb.PRIORITY_CRITICAL_BLOCK
+					// Available priorities
+					// nb.PRIORITY_INFO_LOW
+					// nb.PRIORITY_INFO_MEDIUM
+					// nb.PRIORITY_INFO_HIGH
+					// nb.PRIORITY_WARNING_LOW
+					// nb.PRIORITY_WARNING_MEDIUM
+					// nb.PRIORITY_WARNING_HIGH
+					// nb.PRIORITY_CRITICAL_LOW
+					// nb.PRIORITY_CRITICAL_MEDIUM
+					// nb.PRIORITY_CRITICAL_HIGH
+					// nb.PRIORITY_CRITICAL_BLOCK
 
 
 
 
 					nb.appendNotification(
-						"You are currently working on a " + headers['X-SA-SERVERTYPE'] + " server!!",
-						"server-revealer-notification",
-						"chrome://server_revealer/skin/notification.gif",
+						"You are currently working on a " + headers[HEADER_NAME] + " server!!",
+						"server-revealer-notification-" + headers[HEADER_NAME],
+						"",
 						prio,
 						[]
 					);
 				}
-
-
-
-//				serverRevealerOverlay.dump(ev);
-//				alert('test onPageShow()');
-//				try {
-//					if (ev.persisted && (ev.target instanceof HTMLDocument)) {
-//						// var d = ev.target;
-//						// noscriptOverlay.toggleObjectsVisibility(d, true);
-//					}
-//				} catch (e) {}
-				// noscriptOverlay._syncUIReal();
 			},
 
 			onPageHide: function (ev) {
