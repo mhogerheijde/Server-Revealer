@@ -57,9 +57,11 @@ var serverRevealerOverlay = (function() {
 			 */
 			onPageShow: function (ev) {
 				const HEADER_NAME = 'X-SERVER-TYPE';
+				const SKIN_PATH = 'chrome://server_revealer/skin/';
 
 				// We're going to do a HEAD request on the currently loaded URL
-				//TODO: Find out how to ask Firefox for the header-data
+				//FIXME: Find out how to ask Firefox for the header-data
+				//Do that using this: https://developer.mozilla.org/en/XUL_School/Intercepting_Page_Loads#HTTP_Observers
 				var url = window.content.location.href;
 
 				var http = new XMLHttpRequest();
@@ -80,21 +82,25 @@ var serverRevealerOverlay = (function() {
 				if(headers[HEADER_NAME]) {
 
 					var nb = gBrowser.getNotificationBox();
-
+					icon = "";
 					prio = nb.PRIORITY_INFO_LOW
 					// icons from http://findicons.com
 					switch(headers[HEADER_NAME]) {
 						case 'development':
 							prio = nb.PRIORITY_INFO_LOW;
+							icon = SKIN_PATH + "notification_ok.png";
 							break;
 						case 'testing':
 							prio = nb.PRIORITY_INFO_HIGH;
+							icon = SKIN_PATH + "notification_warning.png";
 							break;
 						case 'acceptance':
 							prio = nb.PRIORITY_WARNING_LOW;
+							icon = SKIN_PATH + "notification_warning.png";
 							break;
 						case 'production':
 							prio = nb.PRIORITY_CRITICAL_HIGH;
+							icon = SKIN_PATH + "notification_alert.png";
 							break;
 					}
 
@@ -116,7 +122,7 @@ var serverRevealerOverlay = (function() {
 					nb.appendNotification(
 						"You are currently working on a " + headers[HEADER_NAME] + " server!!",
 						"server-revealer-notification-" + headers[HEADER_NAME],
-						"",
+						icon,
 						prio,
 						[]
 					);

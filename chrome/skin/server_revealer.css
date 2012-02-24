@@ -1,9 +1,17 @@
+div {
+	border: 1px solid red;
+}
+
+notification {
+	font-weight: bold;
+}
+
 notification[value='server-revealer-notification-production'] {
-    background-color: red;
+    background-color: #ff6565;
 }
 
 notification[value='server-revealer-notification-acceptance'] {
-    background-color: orange;
+    background-color: #ffbb5a;
 }
 notification[value='server-revealer-notification-testing'] {
 	background-color: yellow;
@@ -11,6 +19,7 @@ notification[value='server-revealer-notification-testing'] {
 
 
 notification[value='server-revealer-notification-development'] {
-	background-color: green;
+	background-color: lightgreen;
+	color: black;
 }
 
