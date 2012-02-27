@@ -40,7 +40,7 @@ var serverRevealerOverlay = (function() {
 				// Setup page show/hide/content listeners, in order to get in action when
 				// a new page is opened and content is loaded
 				window.addEventListener("pageshow", this.onPageShow, true);
-				window.addEventListener("documentload", this.onDocumentLoad, true);
+				// window.addEventListener("documentload", this.onDocumentLoad, true);
 
 
 			},
