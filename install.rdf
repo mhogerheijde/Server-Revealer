@@ -5,7 +5,7 @@
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>server_revealer@hogerheijde.net</em:id>
 		<em:name>server_revealer</em:name>
-		<em:version>0.2.0</em:version>
+		<em:version>0.3.0-SNAPSHOT</em:version>
 		<em:description>Reveals the server you are currently browsing. Makes use of X- headers set by your server.</em:description>
 		<em:creator>matthias@hogerheijde.net</em:creator>
 		<em:optionsURL>chrome://server_revealer/content/options.xul</em:optionsURL>
