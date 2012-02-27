@@ -8,7 +8,8 @@ var serverRevealerOverlay = (function() {
 
 		settings: {
 			HEADER_NAME: 'X-SERVER-TYPE',
-			SKIN_PATH: 'chrome://server_revealer/skin/'
+			SKIN_PATH: 'chrome://server_revealer/skin/',
+			NOTIFICTION_VALUE_PREFIX: 'server-revealer-notification-'
 		},
 
 		initialise: function() {
@@ -74,11 +75,11 @@ var serverRevealerOverlay = (function() {
 				http.send();
 
 				//Fetch the headers and reformat into Object for easy use
-				rawHeaders = (http.getAllResponseHeaders()).trim().split("\n");
-				headers = {};
-				for(line in rawHeaders) {
-					data = rawHeaders[line].split(": ");
-					key = data.shift();
+				var rawHeaders = (http.getAllResponseHeaders()).trim().split("\n");
+				var headers = {};
+				for(var line in rawHeaders) {
+					var data = rawHeaders[line].split(": ");
+					var key = data.shift();
 					headers[key] = data.join(":");
 				}
 
@@ -90,11 +91,6 @@ var serverRevealerOverlay = (function() {
 
 			onPageHide: function (ev) {
 				serverRevealerOverlay.dump("onPageHide()");
-				var d = ev.target;
-				if (d instanceof HTMLDocument) {
-					// var ns = noscriptOverlay.ns;
-					// noscriptOverlay.toggleObjectsVisibility(d, false);
-				}
 			},
 
 		}, //listeners
@@ -106,8 +102,11 @@ var serverRevealerOverlay = (function() {
 			dump("cleanNotifications\n");
 			var nb = gBrowser.getNotificationBox();
 			if(nb.allNotifications) {
-				for (notification in nb.allNotifications) {
-					dump(notification + "\n");
+				for (i in nb.allNotifications) {
+					if(notification.value 
+							&& notification.indexOf(serverRevealerOverlay.settings.NOTIFICTION_VALUE_PREFIX) == 0) {
+						nb.removeNotification(notification);
+					}
 				}	
 			}
 			
@@ -117,14 +116,13 @@ var serverRevealerOverlay = (function() {
 		 * Abstraction for adding a notification to the browserwindow
 		 */
 		setNotification : function(header) {
-			dump("Add notification for " + header + "\n");
-		// 	// First: remove old notifications.
+			// First: remove old notifications.
 			serverRevealerOverlay.cleanNotifications();
 
 			// Set values for new notification, depending on header value
 			var nb = gBrowser.getNotificationBox();
-			icon = "";
-			prio = nb.PRIORITY_INFO_LOW;
+			var icon = "";
+			var prio = nb.PRIORITY_INFO_LOW;
 			// icons from http://findicons.com
 			switch(header) {
 				case 'development':
@@ -157,10 +155,10 @@ var serverRevealerOverlay = (function() {
 			// nb.PRIORITY_CRITICAL_MEDIUM
 			// nb.PRIORITY_CRITICAL_HIGH
 			// nb.PRIORITY_CRITICAL_BLOCK
-			dump("Appending??");
+
 			nb.appendNotification(
 				"You are currently working on a " + header + " server!!",
-				"server-revealer-notification-" + header,
+				serverRevealerOverlay.settings.NOTIFICTION_VALUE_PREFIX + header,
 				icon,
 				prio,
 				[]
