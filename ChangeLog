@@ -1,0 +1,11 @@
+0.3.0
+	Added: styling for different DTAP states
+
+0.2.0
+	Fixed: make plugin listen to all four DTAP states
+
+0.1.1
+	Fixed: typo in markup of README
+
+0.1.0
+	Added: first setup
