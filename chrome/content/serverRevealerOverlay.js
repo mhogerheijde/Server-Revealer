@@ -54,7 +54,6 @@ var serverRevealerOverlay = (function() {
 			},
 
 			onDocumentLoad: function (ev) {
-				dump("onDocumentLoad()\n");
 				//TODO: Check if this listener is needed
 			},
 
@@ -63,8 +62,6 @@ var serverRevealerOverlay = (function() {
 			 * in our DTAP cycle. If so, displays a bar indicating which one.
 			 */
 			onPageShow: function (ev) {
-				dump("onPageShow()\n");
-				
 				// We're going to do a HEAD request on the currently loaded URL
 				//FIXME: Find out how to ask Firefox for the header-data
 				//Do that using this: https://developer.mozilla.org/en/XUL_School/Intercepting_Page_Loads#HTTP_Observers
@@ -99,7 +96,6 @@ var serverRevealerOverlay = (function() {
 		 * Cleans all notification set by ourself.
 		 */
 		cleanNotifications : function () {
-			dump("cleanNotifications\n");
 			var nb = gBrowser.getNotificationBox();
 			if(nb.allNotifications) {
 				for (i in nb.allNotifications) {
