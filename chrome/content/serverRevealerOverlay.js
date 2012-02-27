@@ -1,11 +1,16 @@
 var serverRevealerOverlay = (function() {
 
-
 	var $ = function (id) {
 		return document.getElementById(id)
 	};
 
 	return {
+
+		settings: {
+			HEADER_NAME: 'X-SERVER-TYPE',
+			SKIN_PATH: 'chrome://server_revealer/skin/',
+			NOTIFICTION_VALUE_PREFIX: 'server-revealer-notification-'
+		},
 
 		initialise: function() {
 			// Attach a onLoad eventlistener to the window, in order to do work only
@@ -35,6 +40,7 @@ var serverRevealerOverlay = (function() {
 				// Setup page show/hide/content listeners, in order to get in action when
 				// a new page is opened and content is loaded
 				window.addEventListener("pageshow", this.onPageShow, true);
+				window.addEventListener("documentload", this.onDocumentLoad, true);
 
 
 			},
@@ -48,6 +54,7 @@ var serverRevealerOverlay = (function() {
 			},
 
 			onDocumentLoad: function (ev) {
+				dump("onDocumentLoad()\n");
 				//TODO: Check if this listener is needed
 			},
 
@@ -56,10 +63,11 @@ var serverRevealerOverlay = (function() {
 			 * in our DTAP cycle. If so, displays a bar indicating which one.
 			 */
 			onPageShow: function (ev) {
-				const HEADER_NAME = 'X-SERVER-TYPE';
-
+				dump("onPageShow()\n");
+				
 				// We're going to do a HEAD request on the currently loaded URL
-				//TODO: Find out how to ask Firefox for the header-data
+				//FIXME: Find out how to ask Firefox for the header-data
+				//Do that using this: https://developer.mozilla.org/en/XUL_School/Intercepting_Page_Loads#HTTP_Observers
 				var url = window.content.location.href;
 
 				var http = new XMLHttpRequest();
@@ -67,77 +75,97 @@ var serverRevealerOverlay = (function() {
 				http.send();
 
 				//Fetch the headers and reformat into Object for easy use
-				rawHeaders = (http.getAllResponseHeaders()).trim().split("\n");
-				headers = {};
-				for(line in rawHeaders) {
-					data = rawHeaders[line].split(": ");
-					key = data.shift();
+				var rawHeaders = (http.getAllResponseHeaders()).trim().split("\n");
+				var headers = {};
+				for(var line in rawHeaders) {
+					var data = rawHeaders[line].split(": ");
+					var key = data.shift();
 					headers[key] = data.join(":");
 				}
 
-
 				// If the header is not there, gracefully walk away.
-				if(headers[HEADER_NAME]) {
-
-					var nb = gBrowser.getNotificationBox();
-
-					prio = nb.PRIORITY_INFO_LOW
-					// icons from http://findicons.com
-					switch(headers[HEADER_NAME]) {
-						case 'development':
-							prio = nb.PRIORITY_INFO_LOW;
-							break;
-						case 'testing':
-							prio = nb.PRIORITY_INFO_HIGH;
-							break;
-						case 'acceptance':
-							prio = nb.PRIORITY_WARNING_LOW;
-							break;
-						case 'production':
-							prio = nb.PRIORITY_CRITICAL_HIGH;
-							break;
-					}
-
-					// Available priorities
-					// nb.PRIORITY_INFO_LOW
-					// nb.PRIORITY_INFO_MEDIUM
-					// nb.PRIORITY_INFO_HIGH
-					// nb.PRIORITY_WARNING_LOW
-					// nb.PRIORITY_WARNING_MEDIUM
-					// nb.PRIORITY_WARNING_HIGH
-					// nb.PRIORITY_CRITICAL_LOW
-					// nb.PRIORITY_CRITICAL_MEDIUM
-					// nb.PRIORITY_CRITICAL_HIGH
-					// nb.PRIORITY_CRITICAL_BLOCK
-
-
-
-
-					nb.appendNotification(
-						"You are currently working on a " + headers[HEADER_NAME] + " server!!",
-						"server-revealer-notification-" + headers[HEADER_NAME],
-						"",
-						prio,
-						[]
-					);
+				if(headers[serverRevealerOverlay.settings.HEADER_NAME]) {
+					serverRevealerOverlay.setNotification(headers[serverRevealerOverlay.settings.HEADER_NAME]);
 				}
 			},
 
 			onPageHide: function (ev) {
 				serverRevealerOverlay.dump("onPageHide()");
-//				serverRevealerOverlay.dump(ev);
-				var d = ev.target;
-				if (d instanceof HTMLDocument) {
-					// var ns = noscriptOverlay.ns;
-					// noscriptOverlay.toggleObjectsVisibility(d, false);
-				}
 			},
 
-
-
-
-
 		}, //listeners
+
+		/**
+		 * Cleans all notification set by ourself.
+		 */
+		cleanNotifications : function () {
+			dump("cleanNotifications\n");
+			var nb = gBrowser.getNotificationBox();
+			if(nb.allNotifications) {
+				for (i in nb.allNotifications) {
+					if(notification.value 
+							&& notification.indexOf(serverRevealerOverlay.settings.NOTIFICTION_VALUE_PREFIX) == 0) {
+						nb.removeNotification(notification);
+					}
+				}	
+			}
+			
+		},
+
+		/**
+		 * Abstraction for adding a notification to the browserwindow
+		 */
+		setNotification : function(header) {
+			// First: remove old notifications.
+			serverRevealerOverlay.cleanNotifications();
+
+			// Set values for new notification, depending on header value
+			var nb = gBrowser.getNotificationBox();
+			var icon = "";
+			var prio = nb.PRIORITY_INFO_LOW;
+			// icons from http://findicons.com
+			switch(header) {
+				case 'development':
+					prio = nb.PRIORITY_INFO_LOW;
+					icon = serverRevealerOverlay.settings.SKIN_PATH + "notification_ok.png";
+					break;
+				case 'testing':
+					prio = nb.PRIORITY_INFO_HIGH;
+					icon = serverRevealerOverlay.settings.SKIN_PATH + "notification_warning.png";
+					break;
+				case 'acceptance':
+					prio = nb.PRIORITY_WARNING_LOW;
+					icon = serverRevealerOverlay.settings.SKIN_PATH + "notification_warning.png";
+					break;
+				case 'production':
+					prio = nb.PRIORITY_CRITICAL_HIGH;
+					icon = serverRevealerOverlay.settings.SKIN_PATH + "notification_alert.png";
+					break;					
+			}
+
+
+			// Available priorities
+			// nb.PRIORITY_INFO_LOW
+			// nb.PRIORITY_INFO_MEDIUM
+			// nb.PRIORITY_INFO_HIGH
+			// nb.PRIORITY_WARNING_LOW
+			// nb.PRIORITY_WARNING_MEDIUM
+			// nb.PRIORITY_WARNING_HIGH
+			// nb.PRIORITY_CRITICAL_LOW
+			// nb.PRIORITY_CRITICAL_MEDIUM
+			// nb.PRIORITY_CRITICAL_HIGH
+			// nb.PRIORITY_CRITICAL_BLOCK
+
+			nb.appendNotification(
+				"You are currently working on a " + header + " server!!",
+				serverRevealerOverlay.settings.NOTIFICTION_VALUE_PREFIX + header,
+				icon,
+				prio,
+				[]
+			);
+
+
+		},
 
 		dump : function (arr) {
 			dump(this.dumpHelper(arr, 0));
