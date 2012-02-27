@@ -41,3 +41,15 @@ This can be set within a .htaccess file or within the VirtualHost (Changes to th
 ### ISS 7
 
 [Here](http://technet.microsoft.com/en-us/library/cc753133\(v=ws.10\).aspx) is a detailed description of how to set custom headers for IIS
+
+# Known Issues
+
+
+
+# To Do
+
+* Make Add-On configurable
+ * Custom header name
+ * Custom header values
+ * Custom theming?
+* Easy accessable enable/disable button
