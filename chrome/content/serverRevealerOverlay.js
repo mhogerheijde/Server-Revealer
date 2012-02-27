@@ -83,6 +83,9 @@ var serverRevealerOverlay = (function() {
 				// If the header is not there, gracefully walk away.
 				if(headers[serverRevealerOverlay.settings.HEADER_NAME]) {
 					serverRevealerOverlay.setNotification(headers[serverRevealerOverlay.settings.HEADER_NAME]);
+				} else {
+					//If there is no header set, remove notifications set by us, since they have no meaning.
+					serverRevealerOverlay.cleanNotifications();
 				}
 			},
 
