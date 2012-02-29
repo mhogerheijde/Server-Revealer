@@ -73,3 +73,4 @@ See https://github.com/mhogerheijde/Server-Revealer/issues
  * Custom header values
  * Custom theming?
 * Easy accessable enable/disable button
+* Logo/Image for the Add-On
