@@ -1,31 +1,32 @@
 #!/bin/bash
+#
+# This script will package the Source for this extension into an .xpi file.
+#
+# Script modified from:
+#
 # build.sh -- builds JAR and XPI files for mozilla extensions
 #   by Nickolay Ponomarev <asqueella@gmail.com>
 #   (original version based on Nathan Yergler's build script)
 # Most recent version is at <http://kb.mozillazine.org/Bash_build_script>
 
 # This script assumes the following directory structure:
-# ./
-#   chrome.manifest (optional - for newer extensions)
+# ./$SOURCE_DIR
+#   chrome.manifest
 #   install.rdf
-#   (other files listed in $ROOT_FILES)
 #
-#   content/    |
-#   locale/     |} these can be named arbitrary and listed in $CHROME_PROVIDERS
-#   skin/       |
+#   chrome/
+#       content/
+#       locale/
+#       skin/
 #
-#   defaults/   |
-#   components/ |} these must be listed in $ROOT_DIRS in order to be packaged
-#   ...         |
-#
-# It uses a temporary directory ./build when building; don't use that!
+# It uses a temporary directory ./$BUILD_DIR when building; don't use that!
 # Script's output is:
 # ./$APP_NAME.xpi
-# ./$APP_NAME.jar  (only if $KEEP_JAR=1)
-# ./files -- the list of packaged files
 #
-# Note: It modifies chrome.manifest when packaging so that it points to 
-#       chrome/$APP_NAME.jar!/*
+
+#
+# TODO: Cleanup this code and comments
+#
 
 #
 # default configuration file is ./config_build.sh, unless another file is 

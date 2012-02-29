@@ -5,13 +5,33 @@ Aimed at developers who often change their hosts file in order to visit a diffre
 
 The plugin will add a 'notification' to the window. The severety (and thus color) of the notification depends on which server you are visting.
 
-## Setup
+## Setup/Install
 
-The plugin itself has no configuration (yet) and is not (yet) submitted to Mozilla. In order to try it, you should clone this repository and add a link to the source in your Firefox profile.
+The plugin itself has no configuration (yet) and is not (yet) submitted to Mozilla. In order to try it, you should clone this repository and install the Add-On.
+
+`git clone git://github.com/mhogerheijde/Server-Revealer.git path-to-workspace`
+
+In order to install the Add-On in Firefox you could use the following methods:
+
+### Install using .xpi file.
+
+This is usually something you only do when you want to use the tagged versions and not the develop branch. (Because you'll have to build the xpi every time the code changes)
+
+For this to work, you should build the .xpi using the buildscript `build.sh`, or you create the .xpi yourself (it's a zipfile basicly).
+
+#### Using the buildscript
+
+* (Linux e.a.) run `build.sh`. You will have a neatly build .xpi file in the ./build/ folder of the project.
+
+#### Manually
+
+* Zip all the files in the ./src/ folder of the project. Call the zipfile `Server-Revealer.xpi`
+* Install .xpi on Firefox (e.g. Drag'n'drop the file into firefox, use some [other](http://www.google.com/search?q=firefox+how+to+install+xpi) method.)
+
+### Install using linkfile
 
 If you don't know how, I advice you to look at (and read) [this section](https://developer.mozilla.org/en/Building_an_Extension#Test) from the Mozilla Developer Network. Otherwise in short:
 
-* git clone git://github.com/mhogerheijde/Server-Revealer.git `path-to-workspace`
 * Locate your [profile folder](http://kb.mozillazine.org/Profile_folder) (e.g. Firefox/Profiles/`<profile_id>`.default) or make a [new one](http://kb.mozillazine.org/Profile_manager)
 * Open the extensions/ folder, creating it if need be.
 * Create a new text file with the id of this extension as its name (i.e. `server_revealer@hogerheijde.net`). No file extension
