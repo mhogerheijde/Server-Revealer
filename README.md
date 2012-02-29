@@ -68,6 +68,7 @@ See https://github.com/mhogerheijde/Server-Revealer/issues
 
 # To Do
 
+* Start using the [Add-on SDK](https://addons.mozilla.org/en-US/developers/builder)
 * Make Add-On configurable
  * Custom header name
  * Custom header values
