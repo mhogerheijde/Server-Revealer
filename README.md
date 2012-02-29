@@ -64,7 +64,7 @@ This can be set within a .htaccess file or within the VirtualHost (Changes to th
 
 # Known Issues
 
-
+See https://github.com/mhogerheijde/Server-Revealer/issues
 
 # To Do
 
