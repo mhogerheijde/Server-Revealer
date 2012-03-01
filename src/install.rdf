@@ -3,8 +3,8 @@
 		xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
 	<Description about="urn:mozilla:install-manifest">
-		<em:id>server_revealer@hogerheijde.net</em:id>
-		<em:name>server_revealer</em:name>
+		<em:id>server-revealer@hogerheijde.net</em:id>
+		<em:name>Server Revealer</em:name>
 		<em:version>0.4.0-SNAPSHOT</em:version>
 		<em:description>Reveals the server you are currently browsing. Makes use of X- headers set by your server.</em:description>
 		<em:creator>matthias@hogerheijde.net</em:creator>
@@ -21,6 +21,6 @@
 		</em:targetApplication>
 
 		<em:iconURL></em:iconURL>
-		<em:homepageURL></em:homepageURL>
+		<em:homepageURL>http://server-revealer.hogerheijde.net</em:homepageURL>
 	</Description>
 </RDF>
